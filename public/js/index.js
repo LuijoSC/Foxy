@@ -1,99 +1,158 @@
-// Get references to page elements
-var $exampleText = $("#example-text");
-var $exampleDescription = $("#example-description");
-var $submitBtn = $("#submit");
-var $exampleList = $("#example-list");
+const date_picker_element = document.querySelector('.date-picker');
+const selected_date_element = document.querySelector('.date-picker .selected-date');
+const dates_element = document.querySelector(".date-picker .dates");
+const mth_element = document.querySelector(".date-picker .dates .month .mth");
+const next_mth_element = document.querySelector(".date-picker .dates .month .next-mth");
+const prev_mth_element = document.querySelector(".date-picker .dates .month .prev-mth");
+const days_element = document.querySelector(".date-picker .dates .days");
 
-// The API object contains methods for each kind of request we'll make
-var API = {
-  saveExample: function(example) {
-    return $.ajax({
-      headers: {
-        "Content-Type": "application/json"
-      },
-      type: "POST",
-      url: "api/examples",
-      data: JSON.stringify(example)
-    });
-  },
-  getExamples: function() {
-    return $.ajax({
-      url: "api/examples",
-      type: "GET"
-    });
-  },
-  deleteExample: function(id) {
-    return $.ajax({
-      url: "api/examples/" + id,
-      type: "DELETE"
-    });
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+let currentDate = new Date();
+let currentDay = currentDate.getDate();
+let currentMonth = currentDate.getMonth();
+let currentYear = currentDate.getFullYear();
+
+let selectedDate = currentDate;
+let selectedDay = currentDay;
+let selectedMonth = currentMonth;
+let selectedYear = currentYear;
+
+mth_element.textContent = `${months[currentMonth]} ${currentYear}`;
+
+selected_date_element.textContent = formatDate(currentDate);
+selected_date_element.dataset.value = selectedDate;
+
+// Event listeners
+date_picker_element.addEventListener('click', toggleDatePicker);
+next_mth_element.addEventListener('click', goToNextMonth);
+prev_mth_element.addEventListener('click', goToPreviousMonth)
+
+populateDates();
+// Functions
+function toggleDatePicker(e) {
+  if (!checkEventPathForClass(e.path, 'dates')) {
+    dates_element.classList.toggle('active');
   }
-};
+}
 
-// refreshExamples gets new examples from the db and repopulates the list
-var refreshExamples = function() {
-  API.getExamples().then(function(data) {
-    var $examples = data.map(function(example) {
-      var $a = $("<a>")
-        .text(example.text)
-        .attr("href", "/example/" + example.id);
+function goToNextMonth(e) {
+  currentMonth++;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+  mth_element.textContent = `${months[currentMonth]} ${currentYear}`;
+  populateDates();
+}
 
-      var $li = $("<li>")
-        .attr({
-          class: "list-group-item",
-          "data-id": example.id
-        })
-        .append($a);
+function goToPreviousMonth(e) {
+  currentMonth--;
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  }
+  mth_element.textContent = `${months[currentMonth]} ${currentYear}`;
+  populateDates();
+}
 
-      var $button = $("<button>")
-        .addClass("btn btn-danger float-right delete")
-        .text("ｘ");
-
-      $li.append($button);
-
-      return $li;
-    });
-
-    $exampleList.empty();
-    $exampleList.append($examples);
-  });
-};
-
-// handleFormSubmit is called whenever we submit a new example
-// Save the new example to the db and refresh the list
-var handleFormSubmit = function(event) {
-  event.preventDefault();
-
-  var example = {
-    text: $exampleText.val().trim(),
-    description: $exampleDescription.val().trim()
-  };
-
-  if (!(example.text && example.description)) {
-    alert("You must enter an example text and description!");
-    return;
+function populateDates(e) {
+  days_element.innerHTML = '';
+  if (currentYear % 4 == 0) {
+    daysInMonth.splice(1, 1, 29);
+  } else {
+    daysInMonth.splice(1, 1, 28);
   }
 
-  API.saveExample(example).then(function() {
-    refreshExamples();
-  });
+  let mod = zeller(currentMonth, currentYear);
+  for (let i = 0; i < mod; i++) {
+    const day_element = document.createElement('div');
+    day_element.textContent = "";
+    days_element.appendChild(day_element)
+  }
 
-  $exampleText.val("");
-  $exampleDescription.val("");
-};
+  for (let j = 0; j < daysInMonth[currentMonth]; j++) {
+    const day_element = document.createElement('div');
+    day_element.classList.add('day');
+    day_element.textContent = j + 1;
 
-// handleDeleteBtnClick is called when an example's delete button is clicked
-// Remove the example from the db and refresh the list
-var handleDeleteBtnClick = function() {
-  var idToDelete = $(this)
-    .parent()
-    .attr("data-id");
+    if (selectedDay == (j + 1) && selectedYear == currentYear && selectedMonth == currentMonth) {
+      day_element.classList.add('selected');
+    }
 
-  API.deleteExample(idToDelete).then(function() {
-    refreshExamples();
-  });
-};
+    day_element.addEventListener('click', function () {
+      selectedDay = parseInt(this.textContent);
+      selectedMonth = parseInt(currentMonth);
+      selectedYear = parseInt(currentYear);
+      console.log(`${selectedDay}/${selectedMonth}/${selectedYear}`)
+      selectedDate = new Date(`${selectedYear}-${selectedMonth + 1}-${parseInt(this.textContent)} `);
+      selected_date_element.textContent = formatDate(selectedDate);
+      selected_date_element.dataset.value = selectedDate;
+      populateDates();
+    });
 
-// Add event listeners to the submit and delete buttons
-$submitBtn.on("click", handleFormSubmit);
-$exampleList.on("click", ".delete", handleDeleteBtnClick);
+    days_element.appendChild(day_element);
+  }
+}
+
+// Helper functions
+function checkEventPathForClass(path, selector) {
+  for (let i = 0; i < path.length; i++) {
+    if (path[i].classList && path[i].classList.contains(selector)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function formatDate(d) {
+  let day = d.getDate();
+  if (day < 10) {
+    day = `0${day}`;
+  }
+  let month = d.getMonth() + 1;
+  if (month < 10) {
+    month = `0${month}`;
+  }
+  let year = d.getFullYear();
+
+  return `${day} / ${month} / ${year}`;
+}
+
+function zeller(month, year) {
+  // March is considered month 1
+  if (month > 1) {
+    month = month - 1;
+  } else if (month === 1) {
+    month = 12;
+    year = year - 1;
+  } else {
+    month = 11;
+    year = year - 1;
+  }
+  var last2 = year.toString().slice(-2);
+  last2 = parseInt(last2);
+  var century = year.toString().slice(0, 2);
+  century = parseInt(century);
+  var day = 1;
+  var century = 20;
+  var f = day + (Math.floor((13 * month - 1) / 5)) + last2 + Math.floor(last2 / 4) + Math.floor(century / 4) + 5 * century;
+  var mod = Math.floor(f % 7);
+  switch (mod) {
+    case 0:
+      return 0;
+    case 1:
+      return 1;
+    case 2:
+      return 2;
+    case 3:
+      return 3;
+    case 4:
+      return 4;
+    case 5:
+      return 5;
+    case 6:
+      return 6
+  }
+}
