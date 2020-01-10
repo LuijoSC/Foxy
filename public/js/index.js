@@ -205,7 +205,7 @@ var API = {
 
 // refreshTasks gets new tasks from the db and repopulates the list
 var refreshTasks = function () {
-  API.getTasks().then(function (data) {
+  API.getTasksByDate(queryDate).then(function (data) {
     var $tasks = data.map(function (task) {
       var $a = $("<a>")
         .text(task.taskInfo)
@@ -281,7 +281,31 @@ var queryDate = {
 };
 
 retrieveTasks = function (date) {
-  API.getTasksByDate(date);
+  API.getTasksByDate(date).then(function (data) {
+    var $tasks = data.map(function (task) {
+      var $a = $("<a>")
+        .text(task.taskInfo)
+        .attr("href", "/task/" + task.taskId);
+
+      var $li = $("<li>")
+        .attr({
+          class: "list-group-item",
+          "data-id": task.taskId
+        })
+        .append($a);
+
+      var $button = $("<button>")
+        .addClass("btn btn-danger float-right delete")
+        .text("ｘ");
+
+      $li.append($button);
+
+      return $li;
+    });
+
+    $taskList.empty();
+    $taskList.append($tasks);
+  });
 }
 
 window.onload = retrieveTasks(queryDate);
