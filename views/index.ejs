@@ -1,0 +1,42 @@
+
+
+<body>
+    <div id="home">
+        <div class="container">
+          <div class="row">
+            <div class="col-8 offset-2">
+              <form class="clearfix mb-4" action="POST">
+                <div class="form-group">
+                  <label for="task-text">Task Text</label>
+                  <input type="text" id="task-text" class="form-control" aria-describedby="task-text" placeholder="Enter Task Text">
+                </div>
+                <div class="form-group">
+                  <label for="task-description">Task Description</label>
+                  <textarea class="form-control" id="task-description" aria-describedby="task-description" placeholder="Enter Task Description"></textarea>
+                </div>
+                <button id="submit" class="btn btn-primary float-right">Submit</button>
+              </form>
+              <h3>Tasks:</h3>
+              <ul id="task-list" class="list-group">
+                 <%each (task){%>  
+                <li data-id="<%=this.id%>" class="list-group-item">
+                  <a href="task/<%=this.id%>"> <%=this.text%></a>
+                  <button class="btn btn-danger float-right delete">ｘ</button>
+                </li>
+                <%}%>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+
+
+    <!-- Log-Out -->
+<form action="/logout?_method-DELETE"  method="POST">
+<button type="submit">Log Out</button>
+</form>  
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
