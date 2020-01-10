@@ -52,82 +52,39 @@
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                   aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="modalLargeDefaultLabel">Modal with large content</h4>
+              <h4 class="modal-title" id="modalLargeDefaultLabel"></h4>
             </div>
             <div class="modal-body">
-              <p>
-                <i>Regular Bootstrap modals (with a lot of content) on mobile devices can cause additional scrolling to
-                  get
-                  to the bottom buttons of modal.</i>
-              </p>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed dui tempor, finibus ligula vitae,
-                convallis mi. Sed posuere at neque nec hendrerit. Sed vitae felis gravida, ultricies dui eget, venenatis
-                leo. Nunc hendrerit tellus non velit malesuada,
-                eu dapibus sapien placerat. Sed non viverra magna, sit amet ornare erat. Fusce eros mi, consequat ac
-                elit
-                vel, ullamcorper molestie mauris. Proin auctor orci eget lacinia condimentum. Phasellus ultricies ligula
-                id
-                lacinia posuere. Nulla rutrum
-                eros eu arcu tempor, imperdiet ornare lectus convallis. Nulla eleifend dapibus sem, vel viverra sapien.
-              </p>
-              <p>
-                Integer interdum ex augue, vel egestas nibh fermentum eu. Cras ut erat eu nisi ullamcorper scelerisque
-                vitae
-                in lorem. In hac habitasse platea dictumst. Pellentesque in ante aliquam, porta metus eu, viverra magna.
-                Cras blandit, augue in consequat rhoncus,
-                nulla risus sodales mi, at tincidunt dolor leo semper mauris. Class aptent taciti sociosqu ad litora
-                torquent per conubia nostra, per inceptos himenaeos. Vivamus pellentesque purus porta maximus blandit.
-                Suspendisse id lorem pellentesque, vehicula
-                nulla at, congue eros. Duis eleifend semper sodales. Morbi eu sagittis ex. Praesent commodo rhoncus
-                nisi.
-                Aenean quis arcu mauris.
-              </p>
-              <p>
-                Donec eget ex ut nibh ullamcorper commodo. Aenean ac faucibus mi. Nullam luctus dui diam, in congue sem
-                fringilla et. Vivamus non metus at elit ornare maximus. Nam iaculis ex in dolor rutrum, at facilisis
-                dolor
-                euismod. Sed lacinia sagittis lobortis.
-                Suspendisse turpis tellus, pharetra scelerisque odio eget, condimentum tempus nibh. Praesent in diam ac
-                sapien dignissim luctus a quis sapien. Duis sed lacus magna. Maecenas at fringilla quam. Ut purus risus,
-                ultricies eget risus ut, convallis
-                hendrerit eros. Fusce vehicula libero quam, nec cursus nulla interdum eu. Quisque commodo suscipit
-                justo, id
-                auctor metus varius rutrum.
-              </p>
-              <p>
-                Integer et fermentum sapien. Proin eu eros efficitur, malesuada ipsum vel, tincidunt risus. Proin cursus
-                laoreet varius. Donec eros sapien, accumsan ac facilisis id, egestas quis turpis. Mauris dignissim, sem
-                et
-                pellentesque consequat, erat dui tempus
-                nulla, ut laoreet neque ligula ac libero. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-                Mauris dictum accumsan erat et tempus. Pellentesque ac ipsum at dui blandit mollis. Suspendisse a turpis
-                non
-                velit commodo iaculis. Donec
-                sit amet sem risus. Nunc pharetra lacus vitae faucibus mattis. Vestibulum molestie, quam et efficitur
-                consequat, dui nibh pulvinar sapien, sit amet pharetra mauris sem sed massa.
-              </p>
-              <p>
-                Integer interdum ex augue, vel egestas nibh fermentum eu. Cras ut erat eu nisi ullamcorper scelerisque
-                vitae
-                in lorem. In hac habitasse platea dictumst. Pellentesque in ante aliquam, porta metus eu, viverra magna.
-                Cras blandit, augue in consequat rhoncus,
-                nulla risus sodales mi, at tincidunt dolor leo semper mauris. Class aptent taciti sociosqu ad litora
-                torquent per conubia nostra, per inceptos himenaeos. Vivamus pellentesque purus porta maximus blandit.
-                Suspendisse id lorem pellentesque, vehicula
-                nulla at, congue eros. Duis eleifend semper sodales. Morbi eu sagittis ex. Praesent commodo rhoncus
-                nisi.
-                Aenean quis arcu mauris.
-              </p>
-              <p>
-                In tempus neque vitae magna congue, convallis blandit dolor mollis. Fusce rutrum in diam ac pretium.
-                Vivamus
-                sagittis, elit at cursus lacinia, mauris urna feugiat quam, et tincidunt nulla justo eget dui. Nullam
-                malesuada felis quis dolor aliquam scelerisque.
-                Maecenas porta, neque sit amet auctor bibendum, urna nibh porta enim, et auctor turpis ligula vel quam.
-                In
-                vulputate eu erat quis bibendum. Mauris vel felis luctus, ultricies nulla ac, euismod diam.
-              </p>
+              <div id="home">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-8 offset-2">
+                      <form class="clearfix mb-4" action="POST">
+                        <div class="form-group">
+                          <label for="task-text">Task Text</label>
+                          <input type="text" id="task-text" class="form-control" aria-describedby="task-text"
+                            placeholder="Enter Task Text">
+                        </div>
+                        <div class="form-group">
+                          <label for="task-description">Task Description</label>
+                          <textarea class="form-control" id="task-description" aria-describedby="task-description"
+                            placeholder="Enter Task Description"></textarea>
+                        </div>
+                        <button id="submit" class="btn btn-primary float-right">Submit</button>
+                      </form>
+                      <h3>Tasks:</h3>
+                      <ul id="task-list" class="list-group">
+                        {{#each tasks}}
+                        <li data-id="{{this.id}}" class="list-group-item">
+                          <a href="task/{{this.id}}">{{this.text}}</a>
+                          <button class="btn btn-danger float-right delete">ｘ</button>
+                        </li>
+                        {{/each}}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -160,6 +117,7 @@
   </div>
 </div>
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="/js/index.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -170,3 +128,4 @@
   integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
   integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
