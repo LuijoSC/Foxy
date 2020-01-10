@@ -72,15 +72,6 @@
                         </div>
                         <button id="submit" class="btn btn-primary float-right">Submit</button>
                       </form>
-                      <h3>Tasks:</h3>
-                      <ul id="task-list" class="list-group">
-                        {{#each tasks}}
-                        <li data-id="{{this.id}}" class="list-group-item">
-                          <a href="task/{{this.id}}">{{this.text}}</a>
-                          <button class="btn btn-danger float-right delete">ｘ</button>
-                        </li>
-                        {{/each}}
-                      </ul>
                     </div>
                   </div>
                 </div>
@@ -112,6 +103,22 @@
           </div>
           <div class="days"></div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div id="today-tasks">
+        <h3>Today tasks:</h3>
+        <ul id="task-list" class="list-group">
+          {{#each tasks}}
+          <li data-id="{{this.id}}" class="list-group-item">
+            <a href="task/{{this.id}}">{{this.text}}</a>
+            <button class="btn btn-danger float-right delete">ｘ</button>
+          </li>
+          {{/each}}
+        </ul>
       </div>
     </div>
   </div>

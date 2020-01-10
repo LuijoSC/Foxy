@@ -22,7 +22,7 @@ let selectedYear = currentYear;
 mth_element.textContent = `${months[currentMonth]} ${currentYear}`;
 
 selected_date_element.textContent = formatDate(currentDate);
-selected_date_element.dataset.value = moment(selectedDate).format('YYYY-MM-DD HH:mm:ss');
+selected_date_element.dataset.value = moment.utc(selectedDate).format('YYYY-MM-DD HH:mm:ss');
 
 // Event listeners
 date_picker_element.addEventListener('click', toggleDatePicker);
@@ -87,11 +87,12 @@ function populateDates(e) {
       selectedYear = parseInt(currentYear);
       selectedDate = new Date(`${selectedYear}-${selectedMonth + 1}-${parseInt(this.textContent)} `);
       selected_date_element.textContent = formatDate(selectedDate);
-      selected_date_element.dataset.value = moment(selectedDate).format('YYYY-MM-DD HH:mm:ss');
-      var queryDate = {
-        initialTime: selected_date_element.dataset.value
+      selected_date_element.dataset.value = moment.utc(selectedDate).format('YYYY-MM-DD HH:mm:ss');
+      queryDate = {
+        initialTime: moment(selected_date_element.dataset.value).startOf('day').utc().format('YYYY-MM-DD HH:mm:ss'),
+        finalTime: moment(selected_date_element.dataset.value).endOf('day').utc().format('YYYY-MM-DD HH:mm:ss')
       };
-      console.log(queryDate);
+      retrieveTasks(queryDate);
 
       populateDates();
     });
@@ -166,6 +167,8 @@ var $taskText = $("#task-text");
 var $taskDescription = $("#task-description");
 var $submitBtn = $("#submit");
 var $taskList = $("#task-list");
+var todayTasks = $("#today-tasks");
+
 
 // The API object contains methods for each kind of request we'll make
 var API = {
@@ -190,6 +193,13 @@ var API = {
       url: "api/tasks/" + id,
       type: "DELETE"
     });
+  },
+  getTasksByDate: function (query) {
+    return $.ajax({
+      url: "api/searchDay",
+      type: "GET",
+      data: query
+    })
   }
 };
 
@@ -264,3 +274,14 @@ var handleDeleteBtnClick = function () {
 // Add event listeners to the submit and delete buttons
 $submitBtn.on("click", handleFormSubmit);
 $taskList.on("click", ".delete", handleDeleteBtnClick);
+
+var queryDate = {
+  initialTime: moment().startOf('day').utc().format('YYYY-MM-DD HH:mm:ss'),
+  finalTime: moment().endOf('day').utc().format('YYYY-MM-DD HH:mm:ss')
+};
+
+retrieveTasks = function (date) {
+  API.getTasksByDate(date);
+}
+
+window.onload = retrieveTasks(queryDate);
