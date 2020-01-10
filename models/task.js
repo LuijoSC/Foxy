@@ -6,6 +6,10 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true
     },
+    userId: {
+        type: DataTypes.INTEGER,
+        foreignKey: true
+    },
     taskInfo: {
         type: DataTypes.TEXT,
         allowNull: false

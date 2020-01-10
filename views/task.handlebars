@@ -4,14 +4,27 @@
       <div class="card mt-4">
         <div class="card-body">
           <h5 class="card-title">Task</h5>
-          <p>
-            <strong>ID</strong>: {{task.taskId}}</p>
-          <p>
-          <p>
-            <strong>Info</strong>: {{task.taskInfo}}</p>
-          <p>
-            <strong>Description:</strong> {{task.taskDescription}}</p>
-            <a href="/">← Back To Home</a>
+        <h2>Foxy App this is our Home Page!</h2>
+        <form class="clearfix mb-4" action="POST">
+          <div class="form-group">
+            <label for="task-info">Task Info</label>
+            <input type="text" id="task-text" class="form-control" aria-describedby="task-info" placeholder="Enter Task Text">
+          </div>
+          <div class="form-group">
+            <label for="task-description">Task Description</label>
+            <textarea class="form-control" id="task-description" aria-describedby="task-description" placeholder="Enter Task Description"></textarea>
+          </div>
+          <button id="submit" class="btn btn-primary float-right">Submit</button>
+        </form>
+        <h3>Tasks:</h3>
+        <ul id="task-list" class="list-group">
+          {{#each tasks}}
+          <li data-id="{{this.taskId}}" class="list-group-item">
+            <a href="task/{{this.taskId}}">{{this.taskDescription}}</a>
+            <button class="btn btn-danger float-right delete">ｘ</button>
+          </li>
+          {{/each}}
+        </ul>            <a href="/">← Back To Home</a>
         </div>
       </div>
     </div>
