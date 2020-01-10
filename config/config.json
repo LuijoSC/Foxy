@@ -2,13 +2,13 @@
   "development": {
     "username": "root",
     "password": "Xanderlav9731",
-    "database": "foxy_db",
+    "database": "exampledb",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": null,
+    "password": "Xanderlav",
     "database": "testdb",
     "host": "localhost",
     "dialect": "mysql",

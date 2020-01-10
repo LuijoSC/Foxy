@@ -1,31 +1,39 @@
 var db = require("../models");
 
-module.exports = function(app) {
+module.exports = function (app) {
   // Get all tasks
-  app.get("/api/tasks", (req, res) => {
-    db.tasks_fx.findAll({}).then(function(dbTasks) {
+  app.get("/api/tasks", function (req, res) {
+    db.Task.findAll({}).then(function (dbTasks) {
       res.json(dbTasks);
     });
   });
 
   // Create a new task
-  app.post("/api/tasks", (req, res) => {
-    db.task_fx.create(req.body).then(function(dbTask) {
+  app.post("/api/tasks", function (req, res) {
+    db.Task.create(req.body).then(function (dbTask) {
       res.json(dbTask);
     });
   });
 
   // Delete a task by id
-  app.delete("/api/tasks/:id", (req, res) => {
-    db.task_fx.destroy({ where: { taskId: req.params.id } }).then(function(dbTask) {
+  app.delete("/api/tasks/:taskId", function (req, res) {
+    db.Task.destroy({ where: { taskId: req.params.taskId } }).then(function (dbTask) {
       res.json(dbTask);
     });
   });
 
   // Get all quotes
   app.get("/api/quotes", (req, res) => {
-    db.quotes_fx.findAll({}).then(function(dbQuotes) {
+    db.Quote.findAll({}).then(function(dbQuotes) {
       res.json(dbQuotes);
-    })
-  })
+    });
+  });
+
+  // Create a new quote
+  app.post("/api/quotes", (req, res) => {
+    db.Quote.create(req.body).then(function (dbQuote) {
+      res.json(dbQuote)
+    });
+  });
+
 };

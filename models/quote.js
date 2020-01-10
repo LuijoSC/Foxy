@@ -1,14 +1,10 @@
 module.exports = function(sequelize, DataTypes) {
-    var Quote = sequelize.define ("quotes_fx", {
+    var Quote = sequelize.define ("Quote", {
       quoteId: {
           type: DataTypes.INTEGER,
           autoIncrement: true,
           allowNull: false,
           primaryKey: true
-      },
-      userId: {
-          type: DataTypes.INTEGER,
-          foreignKey: true
       },
       quoteText: {
           type: DataTypes.TEXT,
