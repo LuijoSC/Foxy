@@ -1,14 +1,14 @@
 var db = require("../models");
 
-module.exports = function(app) {
+module.exports = function (app) {
   // Load index page
   app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/index.html"));
+    res.render("index");
   });
 
   // Load task page and pass in a task by id
-  app.get("/task/:id", (req, res) => {
-    db.Task.findOne({ where: { id: req.params.id } }).then(function(dbTask) {
+  app.get("/task/:taskId", (req, res) => {
+    db.Task.findOne({ where: { taskId: req.params.taskId } }).then(function (dbTask) {
       res.render("task", {
         task: dbTask
       });
