@@ -1,3 +1,4 @@
+var path = require("path");
 var db = require("../models");
 
 module.exports = function (app) {
@@ -13,9 +14,28 @@ module.exports = function (app) {
         task: dbTask
       });
     });
-  });
+    });
 
-  // Render 404 page for any unmatched routes
+  // Tasks page
+  app.get("/tasks", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/tasks.html"));
+});
+
+// Quotes page
+app.get("/quotes", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/quotes.html"));
+});
+
+  // Load quote page and pass in a quote by id
+  app.get("/quote/:quoteId", (req, res) => {
+    db.Quote.findOne({ where: { quoteId: req.params.quoteId } }).then(function (dbQuote) {
+      res.render("quote", {
+        quote: dbQuote
+      });
+    });
+    });
+    
+  // Render 404 page for any other case
   app.get("*", (req, res) => {
     res.render("404");
   });

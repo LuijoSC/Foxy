@@ -19,8 +19,9 @@
           </div>
           <!--/First slide-->
           <!--Second slide-->
-          <div class="carousel-item">
+          <div class="carousel-item " data-toggle="modal" data-target="#modalLargeDefault1">
             <img class="d-block w-100" src="/media/Quote.jpg"
+
               alt="Second slide">
           </div>
           <!--/Second slide-->
@@ -44,8 +45,8 @@
       </div>
       <!--/.Carousel Wrapper-->
 
-      <!-- MODAL BEGINNING -->
-      <div class="modal fade" id="modalLargeDefault" tabindex="-1" role="dialog"
+      <!-- Task MODAL BEGINNING -->
+      <div class="modal fade" id="modalLargeDefault" tabindex="0" role="dialog"
         aria-labelledby="modalLargeDefaultLabel">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -72,6 +73,47 @@
                         </div>
                         <button id="submit" class="btn btn-primary float-right">Submit</button>
                       </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+
+      <!-- Quote MODAL BEGINNING -->
+      <div class="modal fade" id="modalLargeDefault1" tabindex="0" role="dialog"
+        aria-labelledby="modalLargeDefaultLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="modalLargeDefaultLabel"></h4>
+            </div>
+            <div class="modal-body">
+              <div id="home">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-8 offset-2">
+                      <form class="clearfix mb-4" action="POST">
+                        <div class="form-group">
+                          <label for="quote-text">Quote Text</label>
+                          <input type="text" id="quote-text" class="form-control" aria-describedby="quote-text"
+                            placeholder="Enter Quote Text">
+                        </div>
+                        <button id="submitQ" class="btn btn-primary float-right">Submit</button>
+                      </form>
+                      <h3>Quotes:</h3>
+                      <ul id="quote-list" class="quote-group">
+                        {{#each quotes}}
+                        <li data-id="{{this.id}}" class="list-group-item">
+                          <a href="quote/{{this.id}}">{{this.text}}</a>
+                          <button class="btn btn-danger float-right delete">ｘ</button>
+                        </li>
+                        {{/each}}
+                      </ul>
                     </div>
                   </div>
                 </div>

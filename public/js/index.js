@@ -272,10 +272,51 @@ var handleDeleteBtnClick = function () {
 };
 
 
-// Add event listeners to the submit and delete buttons
+// Add event listeners (tasks) to the submit and delete buttons
 $submitBtn.on("click", handleFormSubmit);
 $taskList.on("click", ".delete", handleDeleteBtnClick);
 
+
+// -- Quotes functionallity -- 
+// Get references to page elements
+var $quoteText = $("#quote-text");
+var $submitBtn = $("#submitQ");
+var $quoteList = $("#quote-list");
+
+// The APIq object contains methods for each kind of request we'll make
+var APIq = {
+  saveQuote: function (quote) {
+    return $.ajax({
+      headers: {
+        "Content-Type": "application/json"
+      },
+      type: "POST",
+      url: "api/quotes",
+      data: JSON.stringify(quote)
+    });
+  },
+  getQuotes: function () {
+    return $.ajax({
+      url: "api/quotes",
+      type: "GET"
+    });
+  },
+  deleteQuotes: function (id) {
+    return $.ajax({
+      url: "api/quotes/" + id,
+      type: "DELETE"
+    });
+  }
+};
+
+// refreshQuotes gets new quotes from the db and repopulates the list
+var refreshQuotes = function () {
+  APIq.getQuotes().then(function (data) {
+    var $quotes = data.map(function (quote) {
+      var $a = $("<a>")
+        .text(quote.quoteText)
+        .attr("href", "/quote/" + quote.quoteId);
+=======
 var queryDate = {
   initialTime: moment().startOf('day').utc().format('YYYY-MM-DD HH:mm:ss'),
   finalTime: moment().endOf('day').utc().format('YYYY-MM-DD HH:mm:ss')
@@ -287,6 +328,7 @@ retrieveTasks = function (date) {
       var $a = $("<a>")
         .text(task.taskInfo)
         .attr("href", "/task/" + task.taskId);
+
 
       var $li = $("<li>")
         .attr({
@@ -303,7 +345,53 @@ retrieveTasks = function (date) {
 
       return $li;
     });
+    
+    $quoteList.empty();
+    $quoteList.append($quotes);
+  });
+};
 
+refreshQuotes();
+
+// handleFormSubmitQ is called whenever we submit a new quote
+// Save the new quote to the db and refresh the list
+var handleFormSubmitQ = function (event) {
+  event.preventDefault();
+
+  var quote = {
+    quoteText: $quoteText.val().trim()
+  };
+  console.log(quote);
+
+  // if (!(quote.text)) {
+  //   alert("You must enter a quote text!");
+  //   return;
+  // }
+  // console.log(quote);
+
+  APIq.saveQuote(quote).then(function () {
+    refreshQuotes();
+  });
+
+  $quoteText.val("");
+};
+
+// handleDeleteBtnClickQ is called when an quote's delete button is clicked
+// Remove the quote from the db and refresh the list
+var handleDeleteBtnClickQ = function () {
+  var quoteId = $(this)
+    .parent()
+    .attr("data-id");
+
+  APIq.deleteQuotes(quoteId).then(function () {
+    refreshQuotes();
+  });
+};
+
+// Add event listeners (quotes) to the submit and delete buttons
+$submitBtn.on("click", handleFormSubmitQ);
+$quoteList.on("click", ".delete", handleDeleteBtnClickQ);
+=======
     $taskList.empty();
     $taskList.append($tasks);
   });
