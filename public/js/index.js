@@ -271,8 +271,8 @@ var $quoteText = $("#quote-text");
 var $submitBtn = $("#submitQ");
 var $quoteList = $("#quote-list");
 
-// The API object contains methods for each kind of request we'll make
-var API = {
+// The APIq object contains methods for each kind of request we'll make
+var APIq = {
   saveQuote: function (quote) {
     return $.ajax({
       headers: {
@@ -299,7 +299,7 @@ var API = {
 
 // refreshQuotes gets new quotes from the db and repopulates the list
 var refreshQuotes = function () {
-  API.getQuotes().then(function (data) {
+  APIq.getQuotes().then(function (data) {
     var $quotes = data.map(function (quote) {
       var $a = $("<a>")
         .text(quote.quoteText)
@@ -344,7 +344,7 @@ var handleFormSubmitQ = function (event) {
   // }
   // console.log(quote);
 
-  API.saveQuote(quote).then(function () {
+  APIq.saveQuote(quote).then(function () {
     refreshQuotes();
   });
 
@@ -358,7 +358,7 @@ var handleDeleteBtnClickQ = function () {
     .parent()
     .attr("data-id");
 
-  API.deleteQuotes(quoteId).then(function () {
+  APIq.deleteQuotes(quoteId).then(function () {
     refreshQuotes();
   });
 };

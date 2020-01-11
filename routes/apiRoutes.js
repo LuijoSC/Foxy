@@ -36,4 +36,11 @@ module.exports = function (app) {
     });
   });
 
+ // Delete a quote by id
+ app.delete("/api/quotes/:quoteId", (req, res) => {
+  db.Quote.destroy({ where: { quoteId: req.params.quoteId } }).then(function (dbQuote) {
+    res.json(dbQuote);
+  });
+});
+
 };
