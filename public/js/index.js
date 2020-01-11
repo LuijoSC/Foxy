@@ -241,7 +241,8 @@ var handleFormSubmit = function (event) {
 
   var task = {
     taskInfo: $taskText.val().trim(),
-    taskDescription: $taskDescription.val().trim()
+    taskDescription: $taskDescription.val().trim(),
+    createdAt: moment().add('d', 1)
   };
 
   // if (!(task.text && task.description)) {
