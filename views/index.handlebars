@@ -14,20 +14,21 @@
         <div class="carousel-inner" role="listbox">
           <!--First slide-->
           <div class="carousel-item active" data-toggle="modal" data-target="#modalLargeDefault">
-            <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(130).jpg"
+            <img class="d-block w-100" src="/media/slide1todos.jpg"
               alt="First slide">
           </div>
           <!--/First slide-->
           <!--Second slide-->
           <div class="carousel-item " data-toggle="modal" data-target="#modalLargeDefault1">
-            <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(129).jpg"
+            <img class="d-block w-100" src="/media/Quote.jpg"
+
               alt="Second slide">
           </div>
           <!--/Second slide-->
           <!--Third slide-->
-          <div class="carousel-item">
+          {{!-- <div class="carousel-item">
             <img class="d-block w-100" src="https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg" alt="Third slide">
-          </div>
+          </div> --}}
           <!--/Third slide-->
         </div>
         <!--/.Slides-->
@@ -72,15 +73,6 @@
                         </div>
                         <button id="submit" class="btn btn-primary float-right">Submit</button>
                       </form>
-                      <h3>Tasks:</h3>
-                      <ul id="task-list" class="list-group">
-                        {{#each tasks}}
-                        <li data-id="{{this.id}}" class="list-group-item">
-                          <a href="task/{{this.id}}">{{this.text}}</a>
-                          <button class="btn btn-danger float-right delete">ｘ</button>
-                        </li>
-                        {{/each}}
-                      </ul>
                     </div>
                   </div>
                 </div>
@@ -153,6 +145,22 @@
           </div>
           <div class="days"></div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div id="today-tasks">
+        <h3>Today tasks:</h3>
+        <ul id="task-list" class="list-group">
+          {{#each tasks}}
+          <li data-id="{{this.id}}" class="list-group-item">
+            <a href="task/{{this.id}}">{{this.text}}</a>
+            <button class="btn btn-danger float-right delete">ｘ</button>
+          </li>
+          {{/each}}
+        </ul>
       </div>
     </div>
   </div>

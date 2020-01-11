@@ -22,7 +22,7 @@ let selectedYear = currentYear;
 mth_element.textContent = `${months[currentMonth]} ${currentYear}`;
 
 selected_date_element.textContent = formatDate(currentDate);
-selected_date_element.dataset.value = moment(selectedDate).format('YYYY-MM-DD HH:mm:ss');
+selected_date_element.dataset.value = moment.utc(selectedDate).format('YYYY-MM-DD HH:mm:ss');
 
 // Event listeners
 date_picker_element.addEventListener('click', toggleDatePicker);
@@ -87,11 +87,12 @@ function populateDates(e) {
       selectedYear = parseInt(currentYear);
       selectedDate = new Date(`${selectedYear}-${selectedMonth + 1}-${parseInt(this.textContent)} `);
       selected_date_element.textContent = formatDate(selectedDate);
-      selected_date_element.dataset.value = moment(selectedDate).format('YYYY-MM-DD HH:mm:ss');
-      var queryDate = {
-        initialTime: selected_date_element.dataset.value
+      selected_date_element.dataset.value = moment.utc(selectedDate).format('YYYY-MM-DD HH:mm:ss');
+      queryDate = {
+        initialTime: moment(selected_date_element.dataset.value).startOf('day').utc().format('YYYY-MM-DD HH:mm:ss'),
+        finalTime: moment(selected_date_element.dataset.value).endOf('day').utc().format('YYYY-MM-DD HH:mm:ss')
       };
-      console.log(queryDate);
+      retrieveTasks(queryDate);
 
       populateDates();
     });
@@ -166,6 +167,8 @@ var $taskText = $("#task-text");
 var $taskDescription = $("#task-description");
 var $submitBtn = $("#submit");
 var $taskList = $("#task-list");
+var todayTasks = $("#today-tasks");
+
 
 // The API object contains methods for each kind of request we'll make
 var API = {
@@ -190,12 +193,19 @@ var API = {
       url: "api/tasks/" + id,
       type: "DELETE"
     });
+  },
+  getTasksByDate: function (query) {
+    return $.ajax({
+      url: "api/searchDay",
+      type: "GET",
+      data: query
+    })
   }
 };
 
 // refreshTasks gets new tasks from the db and repopulates the list
 var refreshTasks = function () {
-  API.getTasks().then(function (data) {
+  API.getTasksByDate(queryDate).then(function (data) {
     var $tasks = data.map(function (task) {
       var $a = $("<a>")
         .text(task.taskInfo)
@@ -231,7 +241,8 @@ var handleFormSubmit = function (event) {
 
   var task = {
     taskInfo: $taskText.val().trim(),
-    taskDescription: $taskDescription.val().trim()
+    taskDescription: $taskDescription.val().trim(),
+    createdAt: moment().add('d', 1)
   };
 
   // if (!(task.text && task.description)) {
@@ -264,6 +275,7 @@ var handleDeleteBtnClick = function () {
 // Add event listeners (tasks) to the submit and delete buttons
 $submitBtn.on("click", handleFormSubmit);
 $taskList.on("click", ".delete", handleDeleteBtnClick);
+
 
 // -- Quotes functionallity -- 
 // Get references to page elements
@@ -304,11 +316,24 @@ var refreshQuotes = function () {
       var $a = $("<a>")
         .text(quote.quoteText)
         .attr("href", "/quote/" + quote.quoteId);
+=======
+var queryDate = {
+  initialTime: moment().startOf('day').utc().format('YYYY-MM-DD HH:mm:ss'),
+  finalTime: moment().endOf('day').utc().format('YYYY-MM-DD HH:mm:ss')
+};
+
+retrieveTasks = function (date) {
+  API.getTasksByDate(date).then(function (data) {
+    var $tasks = data.map(function (task) {
+      var $a = $("<a>")
+        .text(task.taskInfo)
+        .attr("href", "/task/" + task.taskId);
+
 
       var $li = $("<li>")
         .attr({
           class: "list-group-item",
-          "data-id": quote.quoteId
+          "data-id": task.taskId
         })
         .append($a);
 
@@ -320,7 +345,7 @@ var refreshQuotes = function () {
 
       return $li;
     });
-
+    
     $quoteList.empty();
     $quoteList.append($quotes);
   });
@@ -366,3 +391,10 @@ var handleDeleteBtnClickQ = function () {
 // Add event listeners (quotes) to the submit and delete buttons
 $submitBtn.on("click", handleFormSubmitQ);
 $quoteList.on("click", ".delete", handleDeleteBtnClickQ);
+=======
+    $taskList.empty();
+    $taskList.append($tasks);
+  });
+}
+
+window.onload = retrieveTasks(queryDate);
